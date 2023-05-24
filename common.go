@@ -15,6 +15,7 @@ const (
 	projectsURL           = apiURL + `/admin/projects`
 	issueActivityItemsURL = issuesURL + `/%s/activities`
 	usersURL              = apiURL + `/users`
+	workItemsURL          = apiURL + `/workItems`
 )
 
 // Youtrack Hub Rest API URLs

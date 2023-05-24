@@ -39,6 +39,19 @@ type User struct {
 	Name   string `json:"name,omitempty"`
 }
 
+// IssueWorkItem entity.
+// Source: https://www.jetbrains.com/help/youtrack/devportal/api-entity-IssueWorkItem.html
+type IssueWorkItem struct {
+	Author   User          `json:"author"`
+	Duration DurationValue `json:"duration"`
+}
+
+// DurationValue entity.
+// Source: https://www.jetbrains.com/help/youtrack/devportal/api-entity-DurationValue.html
+type DurationValue struct {
+	Minutes int `json:"minutes"`
+}
+
 // Hub entities
 // Source: https://www.jetbrains.com/help/youtrack/devportal/HUB-REST-API_JSON-Scheme.html
 

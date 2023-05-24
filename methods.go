@@ -111,11 +111,30 @@ func (c Client) GetUsers(ctx context.Context, queryParams map[string]string) ([]
 	return response, nil
 }
 
+// GetWorkItems requests YouTrack work items list.
+// Source: https://www.jetbrains.com/help/youtrack/devportal/resource-api-workItems.html
+func (c Client) GetWorkItems(ctx context.Context, queryParams map[string]string) ([]IssueWorkItem, error) {
+	var response []IssueWorkItem
+
+	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+workItemsURL, http.NoBody, queryParams)
+	if err != nil {
+		return nil, fmt.Errorf("c.sendReq: %w", err)
+	}
+	defer respBody.Close()
+
+	err = json.NewDecoder(respBody).Decode(&response)
+	if err != nil {
+		return nil, fmt.Errorf("json.NewDecoder.Decode: %w", err)
+	}
+
+	return response, nil
+}
+
 // Requests to YouTrack Hub Api
 
-// GetHubAllUsers requests YouTrack Hub all users list.
+// GetAllUsersHub requests YouTrack Hub all users list.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/HUB-REST-API_Users_Get-All-Users.html
-func (c Client) GetHubAllUsers(ctx context.Context, queryParams map[string]string) (HubUsers, error) {
+func (c Client) GetAllUsersHub(ctx context.Context, queryParams map[string]string) (HubUsers, error) {
 	var response HubUsers
 
 	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+hubUsersURL, http.NoBody, queryParams)
