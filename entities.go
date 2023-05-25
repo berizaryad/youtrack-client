@@ -68,3 +68,16 @@ type HubUsers struct {
 type HubUser struct {
 	Login string `json:"login"`
 }
+
+type HubProjects struct {
+	Skip     int          `json:"skip"`
+	Top      int          `json:"top"`
+	Total    int          `json:"total"`
+	Projects []HubProject `json:"projects"`
+}
+
+// HubProject is a "project" entity from hub api.
+// Source: https://www.jetbrains.com/help/youtrack/devportal/HUB-REST-API_JSON-Scheme.html#project
+type HubProject struct {
+	Name string `json:"name"`
+}

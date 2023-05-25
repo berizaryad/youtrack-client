@@ -151,6 +151,25 @@ func (c Client) GetAllUsersHub(ctx context.Context, queryParams map[string]strin
 	return response, nil
 }
 
+// GetAllProjectsHub requests YouTrack Hub all projects list.
+// Source: https://www.jetbrains.com/help/youtrack/devportal/HUB-REST-API_Projects_Get-All-Projects.html
+func (c Client) GetAllProjectsHub(ctx context.Context, queryParams map[string]string) (HubProjects, error) {
+	var response HubProjects
+
+	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+hubProjectsURL, http.NoBody, queryParams)
+	if err != nil {
+		return HubProjects{}, fmt.Errorf("c.sendReq: %w", err)
+	}
+	defer respBody.Close()
+
+	err = json.NewDecoder(respBody).Decode(&response)
+	if err != nil {
+		return HubProjects{}, fmt.Errorf("json.NewDecoder.Decode: %w", err)
+	}
+
+	return response, nil
+}
+
 func (c Client) Ping(ctx context.Context) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodHead, c.url, http.NoBody)
 	if err != nil {

@@ -20,8 +20,9 @@ const (
 
 // Youtrack Hub Rest API URLs
 const (
-	hubAPIURL   = `/hub/api/rest`
-	hubUsersURL = hubAPIURL + `/users`
+	hubAPIURL      = `/hub/api/rest`
+	hubUsersURL    = hubAPIURL + `/users`
+	hubProjectsURL = hubAPIURL + `/projects`
 )
 
 // Issue activity categories
