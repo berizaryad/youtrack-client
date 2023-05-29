@@ -35,12 +35,41 @@ const (
 	IssuesCountUnknownValue = -1
 )
 
-// addDefaultHeaders adds headers which are required for YouTrack API.
-func (c Client) addDefaultHeaders(req *http.Request) {
+// headers represents YouTrack API possible headers.
+// Source: https://www.jetbrains.com/help/youtrack/devportal/yt-api-headers.html
+type headers uint8
+
+const (
+	noHeaders headers = iota
+	jsonHeaders
+	acceptJSONHeader
+	contentTypeJSONHeader
+	contentTypeMultipartFormDataHeader
+)
+
+// addHeaders adds headers in request.
+func (c Client) addHeaders(req *http.Request, h headers) error {
+	// Required for all requests
 	req.Header.Add("Authorization", "Bearer "+c.token)
-	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Cache-Control", "no-cache")
-	req.Header.Add("Content-Type", "application/json")
+
+	switch h {
+	case noHeaders:
+		return nil
+	case jsonHeaders:
+		req.Header.Add("Accept", "application/json")
+		req.Header.Add("Content-Type", "application/json")
+	case acceptJSONHeader:
+		req.Header.Add("Accept", "application/json")
+	case contentTypeJSONHeader:
+		req.Header.Add("Content-Type", "application/json")
+	case contentTypeMultipartFormDataHeader:
+		req.Header.Add("Content-Type", "multipart/form-data")
+	default:
+		return fmt.Errorf("unknown headers value")
+	}
+
+	return nil
 }
 
 func (c Client) addQueryParams(req *http.Request, params map[string]string) {
@@ -68,13 +97,21 @@ func (c Client) checkResponseStatusCode(resp *http.Response) error {
 	return nil
 }
 
-func (c Client) sendReq(ctx context.Context, method, url string, body io.Reader, queryParams map[string]string) (io.ReadCloser, error) {
+func (c Client) sendReq(
+	ctx context.Context,
+	method, url string,
+	body io.Reader,
+	headers headers,
+	queryParams map[string]string,
+) (io.ReadCloser, error) {
 	req, err := http.NewRequestWithContext(ctx, method, url, body)
 	if err != nil {
 		return nil, fmt.Errorf("http.NewRequestWithContext: %w", err)
 	}
 
-	c.addDefaultHeaders(req)
+	if err := c.addHeaders(req, headers); err != nil {
+		return nil, fmt.Errorf("c.addHeaders: %w", err)
+	}
 	c.addQueryParams(req, queryParams)
 
 	httpResp, err := c.httpClient.Do(req)

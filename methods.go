@@ -13,7 +13,7 @@ import (
 func (c Client) GetProjects(ctx context.Context, queryParams map[string]string) ([]Project, error) {
 	var response []Project
 
-	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+projectsURL, http.NoBody, queryParams)
+	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+projectsURL, http.NoBody, acceptJSONHeader, queryParams)
 	if err != nil {
 		return nil, fmt.Errorf("c.sendReq: %w", err)
 	}
@@ -37,7 +37,7 @@ func (c Client) GetIssuesCount(ctx context.Context, req IssuesCountReq, queryPar
 		return IssuesCountResponse{}, fmt.Errorf("json.Marshal: %w", err)
 	}
 
-	respBody, err := c.sendReq(ctx, http.MethodPost, c.url+issuesCountURL, bytes.NewBuffer(reqJSON), queryParams)
+	respBody, err := c.sendReq(ctx, http.MethodPost, c.url+issuesCountURL, bytes.NewBuffer(reqJSON), jsonHeaders, queryParams)
 	if err != nil {
 		return IssuesCountResponse{}, fmt.Errorf("c.sendReq: %w", err)
 	}
@@ -56,7 +56,7 @@ func (c Client) GetIssuesCount(ctx context.Context, req IssuesCountReq, queryPar
 func (c Client) GetIssues(ctx context.Context, queryParams map[string]string) ([]Issue, error) {
 	var response []Issue
 
-	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+issuesURL, http.NoBody, queryParams)
+	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+issuesURL, http.NoBody, acceptJSONHeader, queryParams)
 	if err != nil {
 		return nil, fmt.Errorf("c.sendReq: %w", err)
 	}
@@ -78,7 +78,7 @@ func (c Client) GetIssueActivityItems(ctx context.Context, issueID string, query
 		url      = c.url + fmt.Sprintf(issueActivityItemsURL, issueID)
 	)
 
-	respBody, err := c.sendReq(ctx, http.MethodGet, url, http.NoBody, queryParams)
+	respBody, err := c.sendReq(ctx, http.MethodGet, url, http.NoBody, acceptJSONHeader, queryParams)
 	if err != nil {
 		return nil, fmt.Errorf("c.sendReq: %w", err)
 	}
@@ -97,7 +97,7 @@ func (c Client) GetIssueActivityItems(ctx context.Context, issueID string, query
 func (c Client) GetUsers(ctx context.Context, queryParams map[string]string) ([]User, error) {
 	var response []User
 
-	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+usersURL, http.NoBody, queryParams)
+	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+usersURL, http.NoBody, acceptJSONHeader, queryParams)
 	if err != nil {
 		return nil, fmt.Errorf("c.sendReq: %w", err)
 	}
@@ -116,7 +116,7 @@ func (c Client) GetUsers(ctx context.Context, queryParams map[string]string) ([]
 func (c Client) GetWorkItems(ctx context.Context, queryParams map[string]string) ([]IssueWorkItem, error) {
 	var response []IssueWorkItem
 
-	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+workItemsURL, http.NoBody, queryParams)
+	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+workItemsURL, http.NoBody, acceptJSONHeader, queryParams)
 	if err != nil {
 		return nil, fmt.Errorf("c.sendReq: %w", err)
 	}
@@ -137,7 +137,7 @@ func (c Client) GetWorkItems(ctx context.Context, queryParams map[string]string)
 func (c Client) GetAllUsersHub(ctx context.Context, queryParams map[string]string) (HubUsers, error) {
 	var response HubUsers
 
-	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+hubUsersURL, http.NoBody, queryParams)
+	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+hubUsersURL, http.NoBody, acceptJSONHeader, queryParams)
 	if err != nil {
 		return HubUsers{}, fmt.Errorf("c.sendReq: %w", err)
 	}
@@ -156,7 +156,7 @@ func (c Client) GetAllUsersHub(ctx context.Context, queryParams map[string]strin
 func (c Client) GetAllProjectsHub(ctx context.Context, queryParams map[string]string) (HubProjects, error) {
 	var response HubProjects
 
-	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+hubProjectsURL, http.NoBody, queryParams)
+	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+hubProjectsURL, http.NoBody, acceptJSONHeader, queryParams)
 	if err != nil {
 		return HubProjects{}, fmt.Errorf("c.sendReq: %w", err)
 	}
