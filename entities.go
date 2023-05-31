@@ -18,10 +18,26 @@ type IssuesCountResponse struct {
 // Issue entity.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/api-entity-Issue.html
 type Issue struct {
-	ID         string  `json:"id"`
-	IDReadable string  `json:"idReadable"`
-	Summary    string  `json:"summary"`
-	Project    Project `json:"project"`
+	ID           string             `json:"id"`
+	IDReadable   string             `json:"idReadable"`
+	Summary      string             `json:"summary"`
+	Project      Project            `json:"project"`
+	CustomFields []IssueCustomField `json:"customFields"`
+}
+
+// IssueCustomField entity.
+// Source: https://www.jetbrains.com/help/youtrack/devportal/api-entity-IssueCustomField.html
+type IssueCustomField struct {
+	Name  string `json:"name"`
+	Value any    `json:"value"`
+}
+
+// PeriodValue entity.
+// https://www.jetbrains.com/help/youtrack/devportal/api-entity-PeriodValue.html
+type PeriodValue struct {
+	ID           string `json:"id"`
+	Minutes      int    `json:"minutes"`
+	Presentation string `json:"presentation"`
 }
 
 // ActivityItem entity.

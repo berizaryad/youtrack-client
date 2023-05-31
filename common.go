@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 )
 
 // Youtrack API URLs
@@ -25,6 +26,11 @@ const (
 	hubProjectsURL = hubAPIURL + `/projects`
 )
 
+// Youtrack entities types
+const (
+	periodValueType = "PeriodValue"
+)
+
 // Issue activity categories
 const (
 	CustomFieldActivityCategory = `CustomFieldCategory`
@@ -34,6 +40,9 @@ const (
 	// If the issues count response returns -1, it means that YouTrack hasn't finished counting the issues yet.
 	IssuesCountUnknownValue = -1
 )
+
+// Type field name in YouTrack entities
+const typeField = "$type"
 
 // headers represents YouTrack API possible headers.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/yt-api-headers.html
@@ -72,15 +81,6 @@ func (c Client) addHeaders(req *http.Request, h headers) error {
 	return nil
 }
 
-func (c Client) addQueryParams(req *http.Request, params map[string]string) {
-	q := req.URL.Query()
-
-	for param, value := range params {
-		q.Add(param, value)
-	}
-	req.URL.RawQuery = q.Encode()
-}
-
 // checkResponseStatusCode returns error if status != OK.
 // Reads response body and returns error with body content, so you don't need to read and close body manually in your methods.
 func (c Client) checkResponseStatusCode(resp *http.Response) error {
@@ -102,7 +102,7 @@ func (c Client) sendReq(
 	method, url string,
 	body io.Reader,
 	headers headers,
-	queryParams map[string]string,
+	queryParams url.Values,
 ) (io.ReadCloser, error) {
 	req, err := http.NewRequestWithContext(ctx, method, url, body)
 	if err != nil {
@@ -112,7 +112,7 @@ func (c Client) sendReq(
 	if err := c.addHeaders(req, headers); err != nil {
 		return nil, fmt.Errorf("c.addHeaders: %w", err)
 	}
-	c.addQueryParams(req, queryParams)
+	req.URL.RawQuery = queryParams.Encode()
 
 	httpResp, err := c.httpClient.Do(req)
 	if err != nil {
