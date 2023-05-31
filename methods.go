@@ -6,11 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 // GetProjects requests YouTrack projects.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/resource-api-admin-projects.html
-func (c Client) GetProjects(ctx context.Context, queryParams map[string]string) ([]Project, error) {
+func (c Client) GetProjects(ctx context.Context, queryParams url.Values) ([]Project, error) {
 	var response []Project
 
 	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+projectsURL, http.NoBody, acceptJSONHeader, queryParams)
@@ -29,7 +30,7 @@ func (c Client) GetProjects(ctx context.Context, queryParams map[string]string) 
 
 // GetIssuesCount requests YouTrack issues count.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/resource-api-issuesGetter-count.html
-func (c Client) GetIssuesCount(ctx context.Context, req IssuesCountReq, queryParams map[string]string) (IssuesCountResponse, error) {
+func (c Client) GetIssuesCount(ctx context.Context, req IssuesCountReq, queryParams url.Values) (IssuesCountResponse, error) {
 	var response IssuesCountResponse
 
 	reqJSON, err := json.Marshal(req)
@@ -53,7 +54,7 @@ func (c Client) GetIssuesCount(ctx context.Context, req IssuesCountReq, queryPar
 
 // GetIssues requests YouTrack issues list.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/resource-api-issues.html
-func (c Client) GetIssues(ctx context.Context, queryParams map[string]string) ([]Issue, error) {
+func (c Client) GetIssues(ctx context.Context, queryParams url.Values) ([]Issue, error) {
 	var response []Issue
 
 	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+issuesURL, http.NoBody, acceptJSONHeader, queryParams)
@@ -72,7 +73,7 @@ func (c Client) GetIssues(ctx context.Context, queryParams map[string]string) ([
 
 // GetIssueActivityItems requests YouTrack issue activity items.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/resource-api-issues-issueID-activities.html
-func (c Client) GetIssueActivityItems(ctx context.Context, issueID string, queryParams map[string]string) ([]ActivityItem, error) {
+func (c Client) GetIssueActivityItems(ctx context.Context, issueID string, queryParams url.Values) ([]ActivityItem, error) {
 	var (
 		response []ActivityItem
 		url      = c.url + fmt.Sprintf(issueActivityItemsURL, issueID)
@@ -94,7 +95,7 @@ func (c Client) GetIssueActivityItems(ctx context.Context, issueID string, query
 
 // GetUsers requests YouTrack users list.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/resource-api-users.html
-func (c Client) GetUsers(ctx context.Context, queryParams map[string]string) ([]User, error) {
+func (c Client) GetUsers(ctx context.Context, queryParams url.Values) ([]User, error) {
 	var response []User
 
 	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+usersURL, http.NoBody, acceptJSONHeader, queryParams)
@@ -113,7 +114,7 @@ func (c Client) GetUsers(ctx context.Context, queryParams map[string]string) ([]
 
 // GetWorkItems requests YouTrack work items list.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/resource-api-workItems.html
-func (c Client) GetWorkItems(ctx context.Context, queryParams map[string]string) ([]IssueWorkItem, error) {
+func (c Client) GetWorkItems(ctx context.Context, queryParams url.Values) ([]IssueWorkItem, error) {
 	var response []IssueWorkItem
 
 	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+workItemsURL, http.NoBody, acceptJSONHeader, queryParams)
@@ -134,7 +135,7 @@ func (c Client) GetWorkItems(ctx context.Context, queryParams map[string]string)
 
 // GetAllUsersHub requests YouTrack Hub all users list.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/HUB-REST-API_Users_Get-All-Users.html
-func (c Client) GetAllUsersHub(ctx context.Context, queryParams map[string]string) (HubUsers, error) {
+func (c Client) GetAllUsersHub(ctx context.Context, queryParams url.Values) (HubUsers, error) {
 	var response HubUsers
 
 	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+hubUsersURL, http.NoBody, acceptJSONHeader, queryParams)
@@ -153,7 +154,7 @@ func (c Client) GetAllUsersHub(ctx context.Context, queryParams map[string]strin
 
 // GetAllProjectsHub requests YouTrack Hub all projects list.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/HUB-REST-API_Projects_Get-All-Projects.html
-func (c Client) GetAllProjectsHub(ctx context.Context, queryParams map[string]string) (HubProjects, error) {
+func (c Client) GetAllProjectsHub(ctx context.Context, queryParams url.Values) (HubProjects, error) {
 	var response HubProjects
 
 	respBody, err := c.sendReq(ctx, http.MethodGet, c.url+hubProjectsURL, http.NoBody, acceptJSONHeader, queryParams)
