@@ -82,7 +82,22 @@ type HubUsers struct {
 // HubUser is a "user" entity from hub api.
 // Source: https://www.jetbrains.com/help/youtrack/devportal/HUB-REST-API_JSON-Scheme.html#user
 type HubUser struct {
-	Login string `json:"login,omitempty"`
+	Login   string     `json:"login,omitempty"`
+	Profile HubProfile `json:"profile,omitempty"`
+}
+
+type HubProfile struct {
+	Value      string                `json:"value,omitempty"`
+	Attributes []HubProfileAttribute `json:"attributes,omitempty"`
+}
+
+type HubProfileAttribute struct {
+	Value     string                       `json:"value,omitempty"`
+	Prototype HubProfileAttributePrototype `json:"prototype,omitempty"`
+}
+
+type HubProfileAttributePrototype struct {
+	Name string `json:"name,omitempty"`
 }
 
 type HubProjects struct {
